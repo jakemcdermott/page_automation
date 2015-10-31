@@ -148,7 +148,7 @@ class Page(object):
     def get_current_focus(self):
         """ Get the WebElement that has the current focus 
         """
-        return self.driver.execute_script('''return document.activeElement;''')
+        return self.driver.execute_script("return document.activeElement;")
 
 
     def set_checkbox(self, locator, value, state):
@@ -163,7 +163,8 @@ class Page(object):
     def scroll_into_view(self, element):
         """ Scroll page until element is in view 
         """
-        self.driver.execute_script("arguments[0].scrollIntoView(true);", element)
+        self.driver.execute_script(
+            "arguments[0].scrollIntoView(true);", element)
 
 
     def get_page_source(self):
