@@ -20,7 +20,6 @@ class Page(object):
         self.driver = driver
 
         self._find = {}
-
         self._find['xpath'] = self.driver.find_element_by_xpath
         self._find['class'] = self.driver.find_element_by_class_name
         self._find['css'] = self.driver.find_element_by_css_selector
@@ -28,6 +27,7 @@ class Page(object):
         self._find['name'] = self.driver.find_element_by_name
         self._find['tag'] = self.driver.find_element_by_tag_name
 
+        self._find_all = {}
         self._find_all['xpath'] = self.driver.find_elements_by_xpath
         self._find_all['class'] = self.driver.find_elements_by_class_name
         self._find_all['css'] = self.driver.find_elements_by_css_selector
@@ -35,6 +35,7 @@ class Page(object):
         self._find_all['name'] = self.driver.find_elements_by_name
         self._find_all['tag'] = self.driver.find_elements_by_tag_name
 
+        self._locators = {}
         self._locators['xpath'] = By.XPATH
         self._locators['class'] = By.CLASS_NAME
         self._locators['css'] = By.CSS_SELECTOR
@@ -49,14 +50,12 @@ class Page(object):
         if locator == 'element': 
             return value 
 
-        wait_total = wait + self.wait_implicit
-
-        if wait_total == 0:
+        if wait == 0:
             return self._find[locator](value)
         else:
             expected = ec.presence_of_element_located(
                 (self._locators[locator], value))
-            return WebDriverWait(self.driver, wait_total).until(expected)
+            return WebDriverWait(self.driver, wait).until(expected)
             
 
     def find_all(self, locator, value):
@@ -68,7 +67,7 @@ class Page(object):
     def click(self, locator, value):
         """ Single-click on a WebElement
         """
-        element = self._find(locator, value)
+        element = self._find[locator](value)
         
         self.scroll_into_view(element)
         element.click()
@@ -77,7 +76,7 @@ class Page(object):
     def double_click(self, locator, value):
         """ Double-click on a WebElement
         """
-        element = self._find(locator, value)
+        element = self._find[locator](value)
 
         self.scroll_into_view(element)
 
@@ -89,7 +88,7 @@ class Page(object):
     def select(self, locator, value, text):
         """ Select text option from a menu WebElement
         """
-        element = self._find(locator, value)
+        element = self._find[locator](value)
 
         self.scroll_into_view(element)
         Select(element).select_by_visible_text(text)
@@ -98,7 +97,7 @@ class Page(object):
     def send_keys(self, locator, value, text, clear=True):
         """ Enter text into provided element 
         """
-        element = self._find(locator, value)
+        element = self._find[locator](value)
 
         self.scroll_into_view(element)
 
@@ -111,7 +110,7 @@ class Page(object):
     def hover(self, locator, value):
         """ Hover mouse cursor over a WebElement
         """
-        element = self._find(locator, value)
+        element = self._find[locator](value)
         actions = webdriver.common.action_chains.ActionChains(self.driver)
         actions.move_to_element(element)
         actions.perform()
@@ -120,7 +119,7 @@ class Page(object):
     def hover_click(self, locator, value):
         """ Move mouse cursor to element then click 
         """
-        element = self._find(locator, value)
+        element = self._find[locator](value)
         actions = webdriver.common.action_chains.ActionChains(self.driver)
         actions.move_to_element(element)
         actions.click()
@@ -130,7 +129,7 @@ class Page(object):
     def force_click(self, locator, value):
         """ Click location of WebElement 
         """
-        element = self._find(locator, value)
+        element = self._find[locator](value)
         actions = webdriver.common.action_chains.ActionChains(self.driver)
         actions.move_to_element_with_offset(element, 0, 20).click()
         actions.perform()
@@ -139,7 +138,7 @@ class Page(object):
     def force_double_click(self, locator, value):
         """ Double-click location of WebElement 
         """
-        element = self._find(locator, value)
+        element = self._find[locator](value)
         actions = webdriver.common.action_chains.ActionChains(self.driver)
         actions.move_to_element_with_offset(element, 0, 20)
         actions.double_click(on_element=element)
@@ -155,7 +154,7 @@ class Page(object):
     def set_checkbox(self, locator, value, state):
         """ Set the state of a checkbox element
         """
-        element = self._find(locator, value)
+        element = self._find[locator](value)
 
         if state != element.is_selected():
             element.click()
