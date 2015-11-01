@@ -3,6 +3,7 @@ import time
 import pytest
 
 from PIL import Image
+from pyvirtualdisplay import Display
 from StringIO import StringIO
 
 from selenium import webdriver
@@ -11,9 +12,18 @@ from page import Page
 
 
 @pytest.fixture(scope='module')
-def page(request):
+def page(request, headless, size_x, size_y):
+
+    if headless:
+        display = Display(visible=0, size=(size_x, size_y))
+        display.start()
+        request.addfinalizer(display.stop)
+
     page = Page(webdriver.Firefox())
+
+    request.addfinalizer(display.stop)
     request.addfinalizer(page.driver.close)
+
     return page
 
 
@@ -70,7 +80,7 @@ def test_find_all(pyhome):
     assert(len(elements) == 2)
 
 
-def test_scroll_into_view(pyhome):
+def test_scroll_into_view(pyhome,):
     # scroll to element at very bottom of page
     element = pyhome.find('css', '#site-map > div.site-base')
     pyhome.scroll_into_view(element)
@@ -83,7 +93,6 @@ def test_scroll_into_view(pyhome):
     # get rgb color of bottom right pixel 
     rgb = img.getpixel((img.size[0]-1, img.size[1]-1))[0:3]
 
-    # compare pixel color to an expected css hex value
     assert(''.join(map(chr, rgb)).encode('hex') == '2b5982')
 
 
