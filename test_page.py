@@ -182,9 +182,6 @@ class TestPage(unittest.TestCase):
         self.page.set_checkbox('css', '#id_remember', False)
         self.assertFalse(e.is_selected())
 
-
-
-
-
-
+        self.page.set_checkbox('css', '#id_remember', True)
+        self.assertTrue(e.is_selected())
 
