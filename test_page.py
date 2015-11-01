@@ -34,7 +34,7 @@ class TestPage(unittest.TestCase):
 
     def test_find_with_xpath(self):
         element = self.page.find('xpath', '//*[@id="downloads"]/a')
-        self.assertEquals(elemen.text, 'Downloads')
+        self.assertEquals(element.text, 'Downloads')
 
 
     def test_find_with_id(self):
@@ -74,6 +74,7 @@ class TestPage(unittest.TestCase):
 
         # get rgb color of bottom right pixel 
         rgb = img.getpixel((img.size[0]-1, img.size[1]-1))[0:3]
+        
         # compare pixel color to an expected css hex value
         self.assertEquals(''.join(map(chr, rgb)).encode('hex'), '2b5982')
 
@@ -103,11 +104,13 @@ class TestPage(unittest.TestCase):
         self.page.hover('css', '#downloads > a')
 
         # the 'all releases' button should now be visible
-        expected = webdriver.support.expected_conditions.visibility_of_element_located((
+        expected = webdriver.support.expected_conditions\
+        .visibility_of_element_located((
             'css selector', '#downloads > ul > li.tier-2.element-1 > a'))
 
         try:
-            webdriver.support.ui.WebDriverWait(self.page.driver, 10).until(expected)
+            webdriver.support.ui.WebDriverWait(
+                self.page.driver, 10).until(expected)
         except:
             self.fail('element expected to be visible')
 
@@ -122,34 +125,37 @@ class TestPage(unittest.TestCase):
     def test_send_keys(self):
         self.page.send_keys('name', 'q', 'foo')
 
-        e = self.page.find('name', 'q')
-        self.assertEquals(e.get_attribute('value'), 'foo')
+        element = self.page.find('name', 'q')
+        self.assertEquals(element.get_attribute('value'), 'foo')
 
 
     def test_send_keys_clear(self):
         self.page.send_keys('name', 'q', 'foo')
         self.page.send_keys('name', 'q', 'bar', clear=True)
 
-        e = self.page.find('name', 'q')
-        self.assertEquals(e.get_attribute('value'), 'bar')
+        element = self.page.find('name', 'q')
+        self.assertEquals(element.get_attribute('value'), 'bar')
 
 
     def test_send_keys_noclear(self):
         self.page.send_keys('name', 'q', 'foo')
         self.page.send_keys('name', 'q', 'bar', clear=False)
 
-        e = self.page.find('name', 'q')
-        self.assertEquals(e.get_attribute('value'), 'foobar')
+        element = self.page.find('name', 'q')
+        self.assertEquals(element.get_attribute('value'), 'foobar')
 
 
     def test_refresh(self):
-        e = self.page.driver.find_element_by_name('q')
-        e.send_keys('foo')
+        element = self.page.driver.find_element_by_name('q')
+        element.send_keys('foo')
 
         self.page.refresh()
 
-        e = self.page.driver.find_element_by_name('q')
-        self.assertEquals(e.get_attribute('value'), e.get_attribute('placeholder'))
+        element = self.page.driver.find_element_by_name('q')
+
+        self.assertEquals(
+            element.get_attribute('value'), 
+            element.get_attribute('placeholder'))
 
 
     def test_select(self):
