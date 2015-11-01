@@ -74,7 +74,7 @@ class TestPage(unittest.TestCase):
 
         # get rgb color of bottom right pixel 
         rgb = img.getpixel((img.size[0]-1, img.size[1]-1))[0:3]
-        
+
         # compare pixel color to an expected css hex value
         self.assertEquals(''.join(map(chr, rgb)).encode('hex'), '2b5982')
 
@@ -169,4 +169,22 @@ class TestPage(unittest.TestCase):
         # a successful select takes us to the python 2.7 docs
         self.assertEquals(
             self.page.driver.current_url, 'https://docs.python.org/2.7/')
+
+
+    def test_set_checkbox(self):
+        self.page.driver.get('https://www.python.org/accounts/login/')
+
+        e = self.page.driver.find_element_by_css_selector('#id_remember')
+
+        self.page.set_checkbox('css', '#id_remember', True)
+        self.assertTrue(e.is_selected())
+
+        self.page.set_checkbox('css', '#id_remember', False)
+        self.assertFalse(e.is_selected())
+
+
+
+
+
+
 
