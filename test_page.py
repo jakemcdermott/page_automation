@@ -12,16 +12,29 @@ from page import Page
 
 
 @pytest.fixture(scope='module')
+def headless(request):
+    return request.config.getoption("--headless")
+
+@pytest.fixture(scope='module')
+def size_x(request):
+    return request.config.getoption("--size_x")
+
+@pytest.fixture(scope='module')
+def size_y(request):
+    return request.config.getoption("--size_y")
+
+
+@pytest.fixture(scope='module')
 def page(request, headless, size_x, size_y):
 
+    display = Display(visible=0, size=(size_x, size_y))
+
     if headless:
-        display = Display(visible=0, size=(size_x, size_y))
         display.start()
         request.addfinalizer(display.stop)
 
     page = Page(webdriver.Firefox())
 
-    request.addfinalizer(display.stop)
     request.addfinalizer(page.driver.close)
 
     return page
@@ -195,4 +208,3 @@ def test_set_checkbox(pylogin):
 
     pylogin.set_checkbox('css', '#id_remember', True)
     assert(e.is_selected())
-
