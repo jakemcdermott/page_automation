@@ -1,10 +1,8 @@
 from selenium import webdriver
-from selenium.webdriver.common.by import By
-
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import ElementNotVisibleException
-
-from selenium.webdriver.support import expected_conditions as ec
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.support.ui import WebDriverWait
 
@@ -41,23 +39,23 @@ class Page(object):
         self._locators['tag'] = By.TAG_NAME
 
 
-    def find(self, locator, value, wait=WAIT_DEFAULT):
+    def find(self, locator, value):
         """ Get WebElement  
         """
         if locator == 'element': 
-            return value 
-
-        if wait == 0:
-            return self._find[locator](value)
+            element = value
         else:
-            expected = ec.presence_of_element_located(
-                (self._locators[locator], value))
-            return WebDriverWait(self.driver, wait).until(expected)
-            
+            self.wait_until_visible(locator, value)
+            element = self._find[locator](value)
+
+        return element
+
 
     def find_all(self, locator, value):
-        """ Get all WebElements of a certain value 
+        """ Get all WebElements of a certain locator and value 
         """
+        self.wait_until_visible(locator, value)
+
         return list(self._find_all[locator](value))
 
 
@@ -65,8 +63,10 @@ class Page(object):
         """ Single-click on a WebElement
         """
         element = self.find(locator, value)
-        
+
         self.scroll_into_view(element)
+
+        self.wait_until_clickable(locator, value)
         element.click()
 
 
@@ -76,6 +76,8 @@ class Page(object):
         element = self.find(locator, value)
 
         self.scroll_into_view(element)
+
+        self.wait_until_clickable(locator, value)
 
         actions = webdriver.common.action_chains.ActionChains(self.driver)
         actions.double_click(on_element=element)
@@ -113,8 +115,8 @@ class Page(object):
         actions.perform()
 
 
-    def hover_click(self, locator, value):
-        """ Move mouse cursor to element then click 
+    def force_click(self, locator, value):
+        """ Click location of WebElement 
         """
         element = self.find(locator, value)
         actions = webdriver.common.action_chains.ActionChains(self.driver)
@@ -123,26 +125,17 @@ class Page(object):
         actions.perform()
 
 
-    def force_click(self, locator, value):
-        """ Click location of WebElement 
-        """
-        element = self.find(locator, value)
-        actions = webdriver.common.action_chains.ActionChains(self.driver)
-        actions.move_to_element_with_offset(element, 0, 20).click()
-        actions.perform()
-
-
     def force_double_click(self, locator, value):
         """ Double-click location of WebElement 
         """
         element = self.find(locator, value)
         actions = webdriver.common.action_chains.ActionChains(self.driver)
-        actions.move_to_element_with_offset(element, 0, 20)
+        actions.move_to_element(element)
         actions.double_click(on_element=element)
         actions.perform()
 
 
-    def get_current_focus(self):
+    def get_active_element(self):
         """ Get the WebElement that has the current focus 
         """
         return self.driver.execute_script("return document.activeElement;")
@@ -176,23 +169,21 @@ class Page(object):
         self.driver.refresh()
 
 
-    def wait_until_visible(self, locator, value, timeout):
-        sel_locator = self._locators[locator]
-        expected = ec.visibility_of_element_located((sel_locator, value))
+    def wait_until_visible(self, locator, value, timeout=WAIT_DEFAULT):
+        expected = expected_conditions.visibility_of_element_located((
+            self._locators[locator], value))
 
         try:
-            WebDriverWait(self.driver, timeout).until(expected)
-            return
+            WebDriverWait(self.driver, timeout).until(expected) 
         except:
             raise ElementNotVisibleException
-            
 
-    def wait_until_clickable(self, locator, value, timeout):
-        sel_locator = self._locators[locator]
-        expected = ec.element_to_be_clickable((sel_locator, value))
+            
+    def wait_until_clickable(self, locator, value, timeout=WAIT_DEFAULT):
+        expected = expected_conditions.element_to_be_clickable((
+            self._locators[locator], value))
 
         try:
-            WebDriverWait(self.driver, timeout).until(expected)
-            return
+            WebDriverWait(self.driver, timeout).until(expected) 
         except:
             raise ElementNotVisibleException
