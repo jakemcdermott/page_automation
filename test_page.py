@@ -3,7 +3,6 @@ import time
 import pytest
 
 from PIL import Image
-from pyvirtualdisplay import Display
 from StringIO import StringIO
 
 from selenium import webdriver
@@ -12,18 +11,9 @@ from page import Page
 
 
 @pytest.fixture(scope='module')
-def page(request, headless, size_x, size_y):
-
-    display = Display(visible=0, size=(size_x, size_y))
-
-    if headless:
-        display.start()
-        request.addfinalizer(display.stop)
-
+def page(request, display):
     page = Page(webdriver.Firefox())
-
     request.addfinalizer(page.driver.close)
-
     return page
 
 
