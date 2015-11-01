@@ -63,7 +63,7 @@ class TestPage(unittest.TestCase):
 
 
     def test_scroll_into_view(self):
-        # scroll to the bottom-most page div element
+        # scroll to element at very bottom of page
         element = self.page.find('css', '#site-map > div.site-base')
         self.page.scroll_into_view(element)
 
