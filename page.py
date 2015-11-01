@@ -42,13 +42,10 @@ class Page(object):
     def find(self, locator, value):
         """ Get WebElement  
         """
-        if locator == 'element': 
-            element = value
-        else:
-            self.wait_until_visible(locator, value)
-            element = self._find[locator](value)
 
-        return element
+        self.wait_until_visible(locator, value)
+        
+        return self._find[locator](value)
 
 
     def find_all(self, locator, value):
