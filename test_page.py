@@ -83,6 +83,7 @@ def test_scroll_into_view(pyhome,):
     # get rgb color of bottom right pixel 
     rgb = img.getpixel((img.size[0]-1, img.size[1]-1))[0:3]
 
+    # compare rgb color to an expected css hex value
     assert(''.join(map(chr, rgb)).encode('hex') == '2b5982')
 
 
