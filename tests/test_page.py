@@ -69,6 +69,7 @@ def test_find_all(pyhome):
     assert(len(elements) == 2)
 
 
+@pytest.mark.screenshot
 def test_scroll_into_view(pyhome,):
     # scroll to element at very bottom of page
     element = pyhome.find('css', '#site-map > div.site-base')
