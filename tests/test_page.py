@@ -1,5 +1,4 @@
 import base64
-import time
 import pytest
 
 from PIL import Image
@@ -11,9 +10,9 @@ from page import Page
 
 
 @pytest.fixture(scope='module')
-def page(request, display):
-    page = Page(webdriver.Firefox())
-    request.addfinalizer(page.driver.close)
+def page(request, driver):
+    page = Page(driver)
+    request.addfinalizer(driver.close)
     return page
 
 

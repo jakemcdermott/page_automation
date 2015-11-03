@@ -16,10 +16,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     qa_automation.vm.hostname = "qa-automation"
 
     qa_automation.vm.provision :shell, inline: "sudo apt-get update"
-    qa_automation.vm.provision :shell, inline: "sudo apt-get install -y python-pip"
-
+    qa_automation.vm.provision :shell, inline: "sudo apt-get install -y python-dev python-pip"
     qa_automation.vm.provision :shell, inline: "sudo apt-get install -y libtiff5-dev libjpeg8-dev zlib1g-dev libfreetype6-dev liblcms2-dev libwebp-dev tcl8.6-dev tk8.6-dev python-tk"
-
 
     qa_automation.vm.provision :shell, inline: "pip install tox"
 
@@ -27,6 +25,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       d.pull_images "selenium/standalone-chrome"
       d.pull_images "selenium/standalone-firefox"
     end
+
+    qa_automation.vm.synced_folder ".", "/home/vagrant/page_automation"
 
   end
 end
