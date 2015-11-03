@@ -18,21 +18,29 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       s.inline = "sudo sed -i '/tty/!s/mesg n/tty -s \\&\\& mesg n/' /root/.profile"
   end
 
-  config.vm.define "automation" do |automation|
-    automation.vm.hostname = "qa-automation"
+  config.vm.define "qa_automation" do |qa_automation|
+    qa_automation.vm.hostname = "qa-automation"
 
-    # https://github.com/mitchellh/vagrant/issues/5697
-    config.vm.provision :shell, inline: "sudo apt-get update"
+    #qa_automation.vm.provision :shell, inline: "sudo apt-get update"
 
-    config.vm.provision :shell, inline: "sudo apt-get install -y python-dev"
-    config.vm.provision :shell, inline: "sudo apt-get install -y python-setuptools"
-    config.vm.provision :shell, inline: "easy_install pip"
-    config.vm.provision :shell, inline: "pip install tox"
+    qa_automation.vm.provision :shell, inline: "sudo apt-get install -y python-dev"
+    qa_automation.vm.provision :shell, inline: "sudo apt-get install -y python-setuptools"
+    qa_automation.vm.provision :shell, inline: "sudo apt-get install -y libffi-dev"
+    qa_automation.vm.provision :shell, inline: "sudo apt-get install -y libssl-dev"
 
-    automation.vm.provision "docker" do |d|
-      d.pull_images "selenium/standalone-chrome"
-      d.pull_images "selenium/standalone-firefox"
-    end
+    qa_automation.vm.provision :shell, inline: "sudo apt-get install -y libtiff5-dev libjpeg8-dev zlib1g-dev libfreetype6-dev liblcms2-dev libwebp-dev tcl8.6-dev tk8.6-dev python-tk"
+
+
+
+    qa_automation.vm.provision :shell, inline: "easy_install pip"
+
+    #qa_automation.vm.provision :shell, inline: "pip install pyopenssl"
+    qa_automation.vm.provision :shell, inline: "pip install tox"
+
+    #qa_automation.vm.provision "docker" do |d|
+      #d.pull_images "selenium/standalone-chrome"
+      #d.pull_images "selenium/standalone-firefox"
+    #end
 
   end
 end
