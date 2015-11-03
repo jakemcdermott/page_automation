@@ -22,7 +22,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     automation.vm.hostname = "qa-automation"
 
     # https://github.com/mitchellh/vagrant/issues/5697
-    #config.vm.provision :shell, inline: "sudo apt-get update"
+    config.vm.provision :shell, inline: "sudo apt-get update"
 
     config.vm.provision :shell, inline: "sudo apt-get install -y python-dev"
     config.vm.provision :shell, inline: "sudo apt-get install -y python-setuptools"
