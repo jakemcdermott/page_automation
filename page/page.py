@@ -39,23 +39,6 @@ class Page(object):
         self._locators['tag'] = By.TAG_NAME
 
 
-    def find(self, locator, value):
-        """ Get WebElement  
-        """
-
-        self.wait_until_visible(locator, value)
-        
-        return self._find[locator](value)
-
-
-    def find_all(self, locator, value):
-        """ Get all WebElements of a certain locator and value 
-        """
-        self.wait_until_visible(locator, value)
-
-        return list(self._find_all[locator](value))
-
-
     def click(self, locator, value):
         """ Single-click on a WebElement
         """
@@ -81,35 +64,21 @@ class Page(object):
         actions.perform()
 
 
-    def select(self, locator, value, text):
-        """ Select text option from a menu WebElement
+    def find(self, locator, value):
+        """ Get WebElement  
         """
-        element = self.find(locator, value)
 
-        self.scroll_into_view(element)
-        Select(element).select_by_visible_text(text)
+        self.wait_until_visible(locator, value)
+        
+        return self._find[locator](value)
 
 
-    def send_keys(self, locator, value, text, clear=True):
-        """ Enter text into provided element 
+    def find_all(self, locator, value):
+        """ Get all WebElements of a certain locator and value 
         """
-        element = self.find(locator, value)
+        self.wait_until_visible(locator, value)
 
-        self.scroll_into_view(element)
-
-        if clear: 
-            element.clear()
-
-        element.send_keys(text)
-
-
-    def hover(self, locator, value):
-        """ Hover mouse cursor over a WebElement
-        """
-        element = self.find(locator, value)
-        actions = webdriver.common.action_chains.ActionChains(self.driver)
-        actions.move_to_element(element)
-        actions.perform()
+        return list(self._find_all[locator](value))
 
 
     def force_click(self, locator, value):
@@ -137,6 +106,56 @@ class Page(object):
         """
         return self.driver.execute_script("return document.activeElement;")
 
+        
+    def get_page_source(self):
+        """ Return the raw html source of the current page
+        """
+        return self.driver.page_source
+
+
+    def hover(self, locator, value):
+        """ Hover mouse cursor over a WebElement
+        """
+        element = self.find(locator, value)
+        actions = webdriver.common.action_chains.ActionChains(self.driver)
+        actions.move_to_element(element)
+        actions.perform()
+
+
+    def refresh(self):
+        """ Refresh the current page
+        """
+        self.driver.refresh()
+
+
+    def scroll_into_view(self, element):
+        """ Scroll page until element is in view 
+        """
+        self.driver.execute_script(
+            "arguments[0].scrollIntoView(true);", element)
+
+
+    def select(self, locator, value, text):
+        """ Select text option from a menu WebElement
+        """
+        element = self.find(locator, value)
+
+        self.scroll_into_view(element)
+        Select(element).select_by_visible_text(text)
+
+
+    def send_keys(self, locator, value, text, clear=True):
+        """ Enter text into provided element 
+        """
+        element = self.find(locator, value)
+
+        self.scroll_into_view(element)
+
+        if clear: 
+            element.clear()
+
+        element.send_keys(text)
+
 
     def set_checkbox(self, locator, value, state):
         """ Set the state of a checkbox element
@@ -147,39 +166,18 @@ class Page(object):
             element.click()
 
 
-    def scroll_into_view(self, element):
-        """ Scroll page until element is in view 
-        """
-        self.driver.execute_script(
-            "arguments[0].scrollIntoView(true);", element)
-
-
-    def get_page_source(self):
-        """ Return the raw html source of the current page
-        """
-        return self.driver.page_source
-
-
-    def refresh(self):
-        """ Refresh the current page
-        """
-        self.driver.refresh()
-
-
-    def wait_until_visible(self, locator, value, timeout=WAIT_DEFAULT):
-        expected = expected_conditions.visibility_of_element_located((
+    def wait_until_clickable(self, locator, value, timeout=WAIT_DEFAULT):
+        expected = expected_conditions.element_to_be_clickable((
             self._locators[locator], value))
-
         try:
             WebDriverWait(self.driver, timeout).until(expected) 
         except:
             raise ElementNotVisibleException
 
-            
-    def wait_until_clickable(self, locator, value, timeout=WAIT_DEFAULT):
-        expected = expected_conditions.element_to_be_clickable((
-            self._locators[locator], value))
 
+    def wait_until_visible(self, locator, value, timeout=WAIT_DEFAULT):
+        expected = expected_conditions.visibility_of_element_located((
+            self._locators[locator], value))
         try:
             WebDriverWait(self.driver, timeout).until(expected) 
         except:
