@@ -7,10 +7,11 @@ A simple page automation project layout using pytest fixtures to invoke standalo
 Organization and Folder Structure
 --------------------------------------------
 Page models go in the 'page' subpackage directory and inherit from the base Page object
+
 Tests go in the 'tests' subpackage directory and must be pytest compatible
 
 
-Try it out
+Try it
 --------------------------------------------
 
 ```bash
