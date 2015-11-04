@@ -20,7 +20,8 @@ def browser(request):
 
 @pytest.fixture(scope='module')
 def driver(request, browser):
-
+    """ Fixture for selenium Webdriver using docker
+    """
     if browser == 'firefox':
         browser_image = 'selenium/standalone-firefox'
         browser_dc = DesiredCapabilities.FIREFOX
