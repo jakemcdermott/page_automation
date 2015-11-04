@@ -14,8 +14,6 @@ Try it
 --------------------------------------------
 
 ```bash
-vagrant up
-vagrant ssh
 cd page_automation
 tox
 ```
