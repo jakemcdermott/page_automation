@@ -1,8 +1,4 @@
-import base64
 import pytest
-
-from PIL import Image
-from StringIO import StringIO
 
 from selenium import webdriver
 
@@ -69,22 +65,7 @@ def test_find_all(pyhome):
     assert(len(elements) == 2)
 
 
-@pytest.mark.screenshot
-def test_scroll_into_view(pyhome,):
-    # scroll to element at very bottom of page
-    element = pyhome.find('css', '#site-map > div.site-base')
-    pyhome.scroll_into_view(element)
 
-    # get screenshot data
-    img = Image.open(
-        StringIO(base64.decodestring(
-            pyhome.driver.get_screenshot_as_base64())))
-
-    # get rgb color of bottom right pixel 
-    rgb = img.getpixel((img.size[0]-1, img.size[1]-1))[0:3]
-
-    # compare rgb color to an expected css hex value
-    assert(''.join(map(chr, rgb)).encode('hex') == '2b5982')
 
 
 def test_click(pyhome):
