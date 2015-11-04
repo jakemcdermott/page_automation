@@ -1,5 +1,4 @@
 import pytest
-
 from selenium import webdriver
 
 from page import Page
@@ -63,9 +62,6 @@ def test_find_with_tag(pyhome):
 def test_find_all(pyhome):
     elements = pyhome.find_all('tag', 'nav')
     assert(len(elements) == 2)
-
-
-
 
 
 def test_click(pyhome):
