@@ -13,7 +13,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.network "private_network", type: "dhcp"
 
   config.vm.provider "virtualbox" do |v|
-
     if RbConfig::CONFIG['host_os'] =~ /linux/
       cpu = `nproc`.to_i
       ram = `grep MemTotal /proc/meminfo | awk '{ print $2 }'`.to_i / (1024 * 4)
@@ -24,7 +23,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       cpu = 2
       ram = 1024
     end
-
     v.customize ["modifyvm", :id, "--memory", ram]
     v.customize ["modifyvm", :id, "--cpus", cpu]
   end
@@ -35,7 +33,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     qa_automation.vm.provision :shell, inline: "sudo apt-get update"
     qa_automation.vm.provision :shell, inline: "sudo apt-get install -y python-dev python-pip"
     qa_automation.vm.provision :shell, inline: "sudo apt-get install -y libtiff5-dev libjpeg8-dev zlib1g-dev "\
-                                               "libfreetype6-dev liblcms2-dev libwebp-dev tcl8.6-dev tk8.6-dev python-tk"
+                                               "libfreetype6-dev liblcms2-dev libwebp-dev tcl8.6-dev tk8.6-dev "\
+                                               "python-tk"
                                                
     qa_automation.vm.provision :shell, inline: "pip install tox"
 
