@@ -9,6 +9,12 @@ Page models go in the 'page' subpackage directory and inherit from the base Page
 Tests go in the 'tests' subpackage directory and must be pytest compatible.
 
 
+Requires
+--------------------------------------------
+- docker
+- python
+- tox
+
 Try it
 --------------------------------------------
 
