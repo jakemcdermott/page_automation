@@ -5,6 +5,7 @@ services:
   - docker
 before_install:
   - docker pull selenium/standalone-firefox
+  - docker pull selenium/standalone-chrome
 install:
   - pip install tox
 script:
