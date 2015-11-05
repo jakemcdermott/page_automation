@@ -2,6 +2,8 @@ Headless Browser Automation in Parallel using Pytest, Docker, and Selenium
 ============================================
 A page automation project layout using pytest fixtures to invoke multiple selenium containers in parallel.
 
+[![Build Status](https://img.shields.io/travis/jakemcdermott/page_automation.svg)](https://travis-ci.org/jakemcdermott/page_automation)
+
 
 Organization and Folder Structure
 --------------------------------------------
