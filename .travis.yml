@@ -1,8 +1,10 @@
 ---
-sudo: True
+sudo: required
 language: python
 services:
-	- docker
+  - docker
+before_install:
+  - docker pull selenium/standalone-firefox
 install:
   - pip install tox
 script:
