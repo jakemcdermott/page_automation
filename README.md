@@ -15,7 +15,7 @@ Try it
 
 ```bash
 cd page_automation
-tox
+make tests
 ```
 
 Contact
