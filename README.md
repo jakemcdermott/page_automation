@@ -1,7 +1,6 @@
 Page Automation using Pytest, Docker, and Selenium
 ============================================
-
-A simple page automation project layout using pytest fixtures to invoke standalone selenium containers in docker.
+A page automation project layout using pytest fixtures to invoke selenium containers in parallel.
 
 
 Organization and Folder Structure
