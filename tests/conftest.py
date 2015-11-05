@@ -60,3 +60,4 @@ def driver(request, browser):
         command_executor=selenium_host, desired_capabilities=browser_dc)
 
     return driver
+    
