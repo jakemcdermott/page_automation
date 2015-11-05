@@ -1,0 +1,9 @@
+---
+sudo: True
+language: python
+services:
+	- docker
+install:
+  - pip install tox
+script:
+  - make tests
