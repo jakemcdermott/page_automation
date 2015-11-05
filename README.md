@@ -1,4 +1,4 @@
-Page Automation using Pytest, Docker, and Selenium
+Parallel Headless Page Automation using Pytest, Docker, and Selenium
 ============================================
 A page automation project layout using pytest fixtures to invoke selenium containers in parallel.
 
