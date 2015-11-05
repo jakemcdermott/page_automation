@@ -10,5 +10,6 @@ clean:
 	@find . -name "*.pyc" -print | xargs rm -rf
 	@find . -name "__pycache__" | xargs rm -rf
 
+.PHONY: spotless
 spotless: clean
 	@rm -rf .tox
