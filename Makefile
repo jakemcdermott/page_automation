@@ -2,13 +2,13 @@
 .PHONY: tests
 tests:
 	tox
-	make clean
 
 .PHONY: clean
 clean:
 	@rm -rf .cache
-	@find . -name "*.pyc" -print | xargs rm -rf
+	@find . -name "*.pyc" -type f -delete
 	@find . -name "__pycache__" | xargs rm -rf
+	@find . -name "*.DS_Store" -type f -delete
 
 .PHONY: spotless
 spotless: clean
