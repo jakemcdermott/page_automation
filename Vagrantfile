@@ -12,7 +12,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # ssh and mapped ports. 
   config.vm.network "private_network", type: "dhcp"
 
-  # Use all cpus and a quarter of the available sytem memory (Linux / OSX)
+  # Use all cpus and a quarter of the available system memory (Linux / OSX)
   config.vm.provider "virtualbox" do |v|
     if RbConfig::CONFIG['host_os'] =~ /linux/
       cpu = `nproc`.to_i

@@ -1,14 +1,8 @@
-Headless Browser Automation in Parallel using Pytest, Docker, and Selenium
+Headless Cross-Browser Automation using Pytest, Docker, and Selenium
 ============================================
 [![Build Status](https://img.shields.io/travis/jakemcdermott/page_automation.svg)](https://travis-ci.org/jakemcdermott/page_automation)
 
-A page automation project layout using pytest fixtures to invoke multiple selenium containers in parallel.
-
-Organization and Folder Structure
---------------------------------------------
-Page models go in the 'page' subpackage directory and inherit from the base Page object.  
-Tests go in the 'tests' subpackage directory and must be pytest compatible.
-
+This is a proof of concept for using [pytest-xdist](https://pypi.python.org/pypi/pytest-xdist) and [docker-selenium](https://github.com/SeleniumHQ/docker-selenium) to instantiate containerized selenium fixtures in parallel for high-throughput multi-browser compatibility testing.
 
 Requires
 --------------------------------------------
@@ -16,14 +10,16 @@ Requires
 - python
 - tox
 
-Try it
+Testing with Travis-CI
+--------------------------------------------
+Take a look at [.travis.yml](https://github.com/jakemcdermott/page_automation/blob/master/.travis.yml) to see an example test configuration. 
+
+Try it Locally (Requires [Vagrant](https://www.vagrantup.com/))
 --------------------------------------------
 
 ```bash
+vagrant up
+vagrant ssh
 cd page_automation
 make tests
 ```
-
-Contact
---------------------------------------------
-jake.mcdermott@outlook.com
