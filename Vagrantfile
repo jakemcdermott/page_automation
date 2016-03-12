@@ -4,14 +4,15 @@
 VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
-  config.vm.box = "ubuntu/vivid64"
+  config.vm.box = "ubuntu/trusty64"
 
   config.ssh.insert_key = false
 
-  # set our network type to private - machines will be accessible only through 
+  # Set our network type to private - machines will be accessible only through 
   # ssh and mapped ports. 
   config.vm.network "private_network", type: "dhcp"
 
+  # Use all cpus and a quarter of the available sytem memory (Linux / OSX)
   config.vm.provider "virtualbox" do |v|
     if RbConfig::CONFIG['host_os'] =~ /linux/
       cpu = `nproc`.to_i
@@ -27,23 +28,37 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     v.customize ["modifyvm", :id, "--cpus", cpu]
   end
 
-  config.vm.define "qa_automation" do |qa_automation|
-    qa_automation.vm.hostname = "qa-automation"
+  # https://github.com/mitchellh/vagrant/issues/1673
+  config.vm.provision "fix-no-tty", type: "shell" do |s|
+      s.privileged = false
+      s.inline = "sudo sed -i '/tty/!s/mesg n/tty -s \\&\\& mesg n/' /root/.profile"
+  end
 
-    qa_automation.vm.provision :shell, inline: "sudo apt-get update"
-    qa_automation.vm.provision :shell, inline: "sudo apt-get install -y python-dev python-pip"
+  config.vm.define "qe_automation" do |qe_automation|
+    qe_automation.vm.hostname = "qe-automation"
 
-    qa_automation.vm.provision :shell, inline: "sudo apt-get install -y libtiff5-dev libjpeg8-dev "\
-        "zlib1g-dev libfreetype6-dev liblcms2-dev libwebp-dev tcl8.6-dev tk8.6-dev python-tk"
-                                                                           
-    qa_automation.vm.provision :shell, inline: "pip install tox"
+    packages = [
+      "python-dev", "python-pip", "python-tk",
+      "libtiff5-dev", "libjpeg8-dev", "zlib1g-dev",
+      "libfreetype6-dev", "liblcms2-dev",
+      "libwebp-dev", "tcl8.6-dev", "tk8.6-dev"
+    ]
 
-    qa_automation.vm.provision "docker" do |d|
+    qe_automation.vm.provision :shell, inline: "sudo apt-get update"
+
+    packages.each do |pkg|
+      qe_automation.vm.provision :shell, inline: "sudo apt-get install -y #{pkg}"
+    end
+                                                                     
+    qe_automation.vm.provision :shell, inline: "pip install tox"
+
+    # install docker and pull standalone selenium containers from Dockerhub
+    qe_automation.vm.provision "docker" do |d|
       d.pull_images "selenium/standalone-chrome"
       d.pull_images "selenium/standalone-firefox"
     end
 
-    qa_automation.vm.synced_folder ".", "/home/vagrant/page_automation"
+    qe_automation.vm.synced_folder ".", "/home/vagrant/page_automation"
 
   end
 end
