@@ -12,7 +12,7 @@ Requires
 
 Testing with Travis-CI
 --------------------------------------------
-Take a look at [.travis.yml](https://github.com/jakemcdermott/page_automation/blob/master/.travis.yml) to see an example test configuration. 
+Take a look at [.travis.yml](https://github.com/jakemcdermott/page_automation/blob/master/.travis.yml) to see an example test configuration with [build results](https://travis-ci.org/jakemcdermott/page_automation).
 
 Try it Locally (Requires [Vagrant](https://www.vagrantup.com/))
 --------------------------------------------
