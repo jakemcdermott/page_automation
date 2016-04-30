@@ -31,7 +31,7 @@ def driver(request, browser):
         browser_image = 'selenium/standalone-chrome'
         browser_dc= DesiredCapabilities.CHROME
 
-    cli = Client(version='auto')
+    cli = Client(version='auto', tls=False)
 
     port_conf = cli.create_host_config(
         publish_all_ports=True, port_bindings={4444: ('127.0.0.1',)})
